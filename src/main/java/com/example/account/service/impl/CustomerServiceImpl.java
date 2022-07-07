@@ -46,4 +46,25 @@ public class CustomerServiceImpl implements CustomerService{
 		return "Customer created successfully. Customer Id is :"+cust.getCustomerId();
 	}
 
+	@Override
+	public String updateCustomer(Customer customer) {
+		
+		try {
+			customerRepository.updateCustomer(customer.getCustomerId(),customer.getFirstName(),customer.getLastName(),customer.getPhoneNumber(),customer.getAge(),customer.getEmailId());
+		} catch (Exception e) {
+			return "Updation failed !!!";
+		}
+		return "Customer updated successfully. CustomerId is :" + customer.getCustomerId();
+	}
+
+	@Override
+	public String deleteCustomer(Long customerId) {
+		try {
+			customerRepository.deleteById(customerId);
+		} catch(Exception e) {
+			return "Customer deletion failed !!!";
+		}
+		return "Customer deleted successfully. Customer Id deleted is :" + customerId;
+	}
+
 }
