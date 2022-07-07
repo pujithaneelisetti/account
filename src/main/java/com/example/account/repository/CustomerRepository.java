@@ -6,5 +6,7 @@ import com.example.account.model.Customer;
 
 
 public interface CustomerRepository extends JpaRepository<Customer, Long> {
+	
+	Customer findByCustomerId(Long customerId);
 
 }
