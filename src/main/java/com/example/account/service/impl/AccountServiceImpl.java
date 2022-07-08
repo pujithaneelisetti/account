@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.account.model.Account;
 import com.example.account.model.Customer;
+import com.example.account.model.TransactionRequest;
 import com.example.account.model.TransactionType;
 import com.example.account.repository.AccountRepository;
 import com.example.account.repository.CustomerRepository;
@@ -63,39 +64,38 @@ public class AccountServiceImpl implements AccountService {
 	}
 
 	@Override
-	public String updateAmount(Long customerId, Long accountId, float amount, TransactionType type)
+	public String updateAmount(TransactionRequest request)
 			throws ValidationException {
 
 		Set<Account> accountList = new HashSet<>();
 		Account acc = new Account();
 		float bal = 0;
 
-		if (amount <= 0.0)
+		if (request.getAmount() <= 0.0)
 			throw new ValidationException("Invalid Amount.");
 
-		if (customerId == null || accountId == null) {
+		if (request.getCustomerId() == null || request.getAccountId() == null) {
 			throw new ValidationException("Customer Id and Account Id should not be null.");
 		}
 
-		Customer cust = customerRepository.findByCustomerId(customerId);
+		Customer cust = customerRepository.findByCustomerId(request.getCustomerId());
 
 		if (cust != null) {
 			accountList = cust.getAccounts();
-			acc = accountList.stream().filter(a -> accountId == a.getAccountId()).findAny().orElse(null);
+			acc = accountList.stream().filter(a -> request.getAccountId() == a.getAccountId()).findAny().orElse(null);
 
 			if (acc != null) {
 				bal = acc.getBalance();
-				if (TransactionType.CREDIT == type) {
-					bal = bal + amount;
-				} else if (TransactionType.DEBIT == type) {
-					if (amount > bal) {
+				if (TransactionType.CREDIT == request.getType()) {
+					bal = bal + request.getAmount();
+				} else if (TransactionType.DEBIT == request.getType()) {
+					if (request.getAmount() > bal) {
 						throw new ValidationException(
 								"Amount requested for withdrawal is greater the available balance.");
 					} else {
-						bal = bal - amount;
+						bal = bal - request.getAmount();
 					}
 				}
-
 				acc.setBalance(bal);
 
 				try {
@@ -109,8 +109,7 @@ public class AccountServiceImpl implements AccountService {
 		} else {
 			throw new ValidationException("Invalid customer id.");
 		}
-
-		return "Amount updated successfully in Account : " + accountId + ". New Balance is : " + acc.getBalance()
+		return "Amount updated successfully in Account : " + request.getAccountId() + ". New Balance is : " + acc.getBalance()
 				+ " ISK";
 	}
 

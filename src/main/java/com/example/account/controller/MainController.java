@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.account.model.Account;
 import com.example.account.model.Customer;
+import com.example.account.model.TransactionRequest;
 import com.example.account.model.TransactionType;
 import com.example.account.service.AccountService;
 import com.example.account.service.CustomerService;
@@ -66,9 +67,9 @@ public class MainController {
 	}
 
 	@PutMapping("/account/update")
-	public String updateAccount(@RequestParam Long customerId,@RequestParam Long accountId,@RequestParam TransactionType type,@RequestParam float amount)
+	public String updateAccount(@RequestBody TransactionRequest request)
 			throws ValidationException {
-		return accountService.updateAmount(customerId, accountId, amount, type);
+		return accountService.updateAmount(request);
 	}
 	
 	@PostMapping("/account/delete/{accountId}")
