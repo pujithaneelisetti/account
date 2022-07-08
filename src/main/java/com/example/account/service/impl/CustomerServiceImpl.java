@@ -31,7 +31,7 @@ public class CustomerServiceImpl implements CustomerService{
 	@Override
 	public String createCustomer(Customer customer) throws ValidationException {
 		
-		if(!StringUtils.isEmpty(customer.getFirstName()) || !StringUtils.isEmpty(customer.getLastName()) || !StringUtils.isEmpty(customer.getPhoneNumber())) {
+		if(StringUtils.isEmpty(customer.getFirstName()) || StringUtils.isEmpty(customer.getLastName()) || StringUtils.isEmpty(customer.getPhoneNumber())) {
 			throw new ValidationException("First Name, Last Name and Phone Number are mandatory");
 		}
 		

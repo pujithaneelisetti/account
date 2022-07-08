@@ -9,7 +9,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.account.model.Account;
@@ -49,22 +51,22 @@ public class MainController {
 	}
 
 	@PostMapping("/customer/create")
-	public String createCustomer(Customer customer) throws ValidationException {
+	public String createCustomer(@RequestBody Customer customer) throws ValidationException {
 		return customerService.createCustomer(customer);
 	}
 
-	@PostMapping("/account/create")
-	public String createAccount(Long customerId) throws ValidationException {
+	@PostMapping("/account/create/{customerId}")
+	public String createAccount(@PathVariable("customerId") Long customerId) throws ValidationException {
 		return accountService.createAccountForCustomer(customerId);
 	}
 
 	@PutMapping("/customer/update")
-	public String updateCustomer(Customer customer) {
+	public String updateCustomer(@RequestBody Customer customer) {
 		return customerService.updateCustomer(customer);
 	}
 
 	@PutMapping("/account/update")
-	public String updateAccount(Long customerId, Long accountId, TransactionType type, float amount)
+	public String updateAccount(@RequestParam Long customerId,@RequestParam Long accountId,@RequestParam TransactionType type,@RequestParam float amount)
 			throws ValidationException {
 		return accountService.updateAmount(customerId, accountId, amount, type);
 	}

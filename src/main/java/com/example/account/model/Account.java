@@ -17,9 +17,9 @@ public class Account {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long accountId;
 	
-	@ManyToOne
-	@JoinColumn(name="CUSTOMER_ID")
-	private Customer customer;
+//	@ManyToOne
+//	@JoinColumn(name="CUSTOMER_ID")
+//	private Customer customer;
 	
 	@Column(name="BALANCE")
 	private float balance;
@@ -43,10 +43,10 @@ public class Account {
 	public void setBalance(float balance) {
 		this.balance = balance;
 	}
-	public Customer getCustomer() {
-		return customer;
-	}
-	public void setCustomer(Customer customer) {
-		this.customer = customer;
-	}
+//	public Customer getCustomer() {
+//		return customer;
+//	}
+//	public void setCustomer(Customer customer) {
+//		this.customer = customer;
+//	}
 }

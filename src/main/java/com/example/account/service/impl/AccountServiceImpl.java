@@ -7,6 +7,7 @@ import java.util.Set;
 import javax.xml.bind.ValidationException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.example.account.model.Account;
 import com.example.account.model.Customer;
@@ -15,6 +16,7 @@ import com.example.account.repository.AccountRepository;
 import com.example.account.repository.CustomerRepository;
 import com.example.account.service.AccountService;
 
+@Service
 public class AccountServiceImpl implements AccountService {
 
 	@Autowired
@@ -43,11 +45,15 @@ public class AccountServiceImpl implements AccountService {
 		}
 
 		Account acc = new Account();
-		acc.setCustomer(cust);
 		acc.setBalance(0);
 
 		try {
 			acc = accountRepository.save(acc);
+			
+			if(cust.getAccounts() != null) {
+				cust.getAccounts().add(acc);
+				customerRepository.save(cust);
+			}
 		} catch (Exception e) {
 			return "Account creation failed.";
 		}
