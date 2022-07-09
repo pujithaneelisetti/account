@@ -6,7 +6,6 @@ import javax.xml.bind.ValidationException;
 
 import com.example.account.model.Account;
 import com.example.account.model.TransactionRequest;
-import com.example.account.model.TransactionType;
 
 public interface AccountService {
 

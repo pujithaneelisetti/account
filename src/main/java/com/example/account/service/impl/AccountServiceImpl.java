@@ -7,7 +7,9 @@ import java.util.Set;
 import javax.xml.bind.ValidationException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.example.account.model.Account;
 import com.example.account.model.Customer;
@@ -33,25 +35,25 @@ public class AccountServiceImpl implements AccountService {
 
 	@Override
 	public Account getAccountDetails(Long accountId) {
+		
+		validateAccountId(accountId);
 		return accountRepository.findByAccountId(accountId);
 	}
 
 	@Override
 	public String createAccountForCustomer(Long customerId) throws ValidationException {
 
+		validateCustomerId(customerId);
+		
 		Customer cust = customerRepository.findByCustomerId(customerId);
-
-		if (cust == null) {
-			throw new ValidationException("Customer does not exist.");
-		}
 
 		Account acc = new Account();
 		acc.setBalance(0);
 
 		try {
 			acc = accountRepository.save(acc);
-			
-			if(cust.getAccounts() != null) {
+
+			if (cust.getAccounts() != null) {
 				cust.getAccounts().add(acc);
 				customerRepository.save(cust);
 			}
@@ -64,19 +66,15 @@ public class AccountServiceImpl implements AccountService {
 	}
 
 	@Override
-	public String updateAmount(TransactionRequest request)
-			throws ValidationException {
+	public String updateAmount(TransactionRequest request) throws ValidationException {
 
 		Set<Account> accountList = new HashSet<>();
 		Account acc = new Account();
 		float bal = 0;
 
-		if (request.getAmount() <= 0.0)
-			throw new ValidationException("Invalid Amount.");
-
-		if (request.getCustomerId() == null || request.getAccountId() == null) {
-			throw new ValidationException("Customer Id and Account Id should not be null.");
-		}
+		validateTransactionRequest(request);
+		validateCustomerId(request.getCustomerId());
+		validateAccountId(request.getAccountId());
 
 		Customer cust = customerRepository.findByCustomerId(request.getCustomerId());
 
@@ -90,7 +88,7 @@ public class AccountServiceImpl implements AccountService {
 					bal = bal + request.getAmount();
 				} else if (TransactionType.DEBIT == request.getType()) {
 					if (request.getAmount() > bal) {
-						throw new ValidationException(
+						throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
 								"Amount requested for withdrawal is greater the available balance.");
 					} else {
 						bal = bal - request.getAmount();
@@ -104,23 +102,47 @@ public class AccountServiceImpl implements AccountService {
 					return "Credit/Debit Amount failed !!!";
 				}
 			} else {
-				throw new ValidationException("Invalid account id.");
+				throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid account id.");
 			}
 		} else {
-			throw new ValidationException("Invalid customer id.");
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid customer id.");
 		}
-		return "Amount updated successfully in Account : " + request.getAccountId() + ". New Balance is : " + acc.getBalance()
-				+ " ISK";
+		return "Amount updated successfully in Account : " + request.getAccountId() + ". New Balance is : "
+				+ acc.getBalance() + " ISK";
 	}
 
 	@Override
 	public String deleteAccount(Long accountId) {
+		validateAccountId(accountId);
 		try {
 			accountRepository.deleteById(accountId);
-		} catch(Exception e) {
+		} catch (Exception e) {
 			return "Account Deletion failed";
 		}
-		return "Account deleted successfully. Account Id is :"+accountId;
+		return "Account deleted successfully. Account Id is :" + accountId;
+	}
+	
+	private void validateAccountId(Long accountId) {
+		Account acc = accountRepository.findByAccountId(accountId);
+		if(acc == null || (acc != null && acc.getAccountId()==0)) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid Account Id");
+		} 
+	}
+	
+	private void validateCustomerId(Long customerId) {
+		Customer cust = customerRepository.findByCustomerId(customerId);
+		if (cust == null || (cust != null && cust.getCustomerId() == 0)) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid Customer Id");
+		}
+	}
+	
+	private void validateTransactionRequest(TransactionRequest request) {
+		if (request.getAmount() <= 0.0)
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid Amount.");
+
+		if (request.getCustomerId() == null || request.getAccountId() == null) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Customer Id and Account Id should not be null.");
+		}
 	}
 
 }
