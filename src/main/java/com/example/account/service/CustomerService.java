@@ -17,7 +17,7 @@ public interface CustomerService {
 	
 	Customer getCustomerDetails(Long customerId);
 	
-	String createCustomer(Customer customer) throws ValidationException;
+	String createCustomer(Customer customer);
 	
 	String updateCustomer(Customer customer);
 	

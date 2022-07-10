@@ -18,9 +18,9 @@ public interface AccountService {
 	
 	Account getAccountDetails(Long accountId);
 	
-	String createAccountForCustomer(Long customerId) throws ValidationException;
+	String createAccountForCustomer(Long customerId);
 	
-	String updateAmount(TransactionRequest request) throws ValidationException;
+	String updateAmount(TransactionRequest request);
 	
 	String deleteAccount(Long accountId);
 }

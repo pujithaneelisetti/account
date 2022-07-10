@@ -47,7 +47,7 @@ public class CustomerServiceImpl implements CustomerService {
 	 * Method to create customer
 	 */
 	@Override
-	public String createCustomer(Customer customer) throws ValidationException {
+	public String createCustomer(Customer customer) {
 
 		// Check if customer details are valid
 		validateCustomerDetails(customer);

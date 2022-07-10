@@ -1,5 +1,6 @@
 package com.example.account.service.impl;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -57,7 +58,7 @@ public class AccountServiceImpl implements AccountService {
 	 * Method to create a new account for a customer
 	 */
 	@Override
-	public String createAccountForCustomer(Long customerId) throws ValidationException {
+	public String createAccountForCustomer(Long customerId){
 
 		// Check if customerId is valid
 		validateCustomerId(customerId);
@@ -69,12 +70,20 @@ public class AccountServiceImpl implements AccountService {
 
 		try {
 			acc = accountRepository.save(acc);
+			
+			Set<Account> accountList = cust.getAccounts();
 
 			// Adding newly created account to existing account list for a customer
-			if (cust.getAccounts() != null) {
-				cust.getAccounts().add(acc);
-				customerRepository.save(cust);
+			if (accountList != null) {
+				//If there are existing accounts, add to the list
+				accountList.add(acc);
+			} else {
+				//If there are no existing accounts, create a new list and set the account
+				accountList = new HashSet<>();
+				accountList.add(acc);
 			}
+			cust.setAccounts(accountList);
+			customerRepository.save(cust);
 		} catch (Exception e) {
 			return "Account creation failed.";
 		}
@@ -87,7 +96,7 @@ public class AccountServiceImpl implements AccountService {
 	 * Method to create a update account for a customer
 	 */
 	@Override
-	public String updateAmount(TransactionRequest request) throws ValidationException {
+	public String updateAmount(TransactionRequest request) {
 
 		Set<Account> accountList = new HashSet<>();
 		Account acc = new Account();

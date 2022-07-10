@@ -57,12 +57,12 @@ public class MainController {
 	}
 
 	@PostMapping("/customer/create")
-	public String createCustomer(@RequestBody Customer customer) throws ValidationException {
+	public String createCustomer(@RequestBody Customer customer) {
 		return customerService.createCustomer(customer);
 	}
 
 	@PostMapping("/account/create/{customerId}")
-	public String createAccount(@PathVariable("customerId") Long customerId) throws ValidationException {
+	public String createAccount(@PathVariable("customerId") Long customerId) {
 		return accountService.createAccountForCustomer(customerId);
 	}
 
