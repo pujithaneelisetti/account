@@ -5,6 +5,11 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
+/**
+ * Configuration class for basic authentication
+ * @author PUJITHA
+ *
+ */
 @Configuration
 @EnableWebSecurity
 public class BasicAuthWebSecurityConfiguration extends WebSecurityConfigurerAdapter {

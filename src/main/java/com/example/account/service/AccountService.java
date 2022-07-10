@@ -7,6 +7,11 @@ import javax.xml.bind.ValidationException;
 import com.example.account.model.Account;
 import com.example.account.model.TransactionRequest;
 
+/**
+ * Interface for defining various operations on Account entity
+ * @author PUJITHA
+ *
+ */
 public interface AccountService {
 
 	List<Account> getAllAccounts();

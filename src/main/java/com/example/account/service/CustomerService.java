@@ -6,6 +6,11 @@ import javax.xml.bind.ValidationException;
 
 import com.example.account.model.Customer;
 
+/**
+ * Interface for defining various operations on Customer entity
+ * @author PUJITHA
+ *
+ */
 public interface CustomerService {
 	
 	List<Customer> getAllCustomers();

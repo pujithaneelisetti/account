@@ -1,5 +1,10 @@
 package com.example.account.model;
 
+/**
+ * Request POJO for credit or debit amount to account.
+ * @author PUJITHA
+ *
+ */
 public class TransactionRequest {
 	
 	private Long customerId;

@@ -21,6 +21,11 @@ import com.example.account.model.TransactionType;
 import com.example.account.service.AccountService;
 import com.example.account.service.CustomerService;
 
+/**
+ * Controller class where all the Rest Endpoints are configured.
+ * @author PUJITHA
+ *
+ */
 @RestController
 @RequestMapping(path = "/ams")
 public class MainController {

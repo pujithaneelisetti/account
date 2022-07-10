@@ -12,6 +12,11 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+/**
+ * Class to define Customer entity
+ * @author PUJITHA
+ *
+ */
 @Entity
 @Table(name="CUSTOMER")
 public class Customer {
@@ -36,6 +41,9 @@ public class Customer {
 	@Column(name="EMAIL_ID")
 	private String emailId;
 	
+	@Column(name="KENNITALA_NUMBER")
+	private Long kennitalaNumber;
+	
 	@OneToMany(cascade=CascadeType.ALL)
 	@JoinColumn(name="CUSTOMER_ID")
 	private Set<Account> accounts;
@@ -44,13 +52,14 @@ public class Customer {
 		
 	}
 	
-	public Customer(String firstName, String lastName, long phoneNumber, int age, String emailId) {
+	public Customer(String firstName, String lastName, long phoneNumber, int age, String emailId , Long kennitala) {
 		super();
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.phoneNumber = phoneNumber;
 		this.age = age;
 		this.emailId = emailId;
+		this.kennitalaNumber = kennitala;
 	}
 	
 	public long getCustomerId() {
@@ -89,6 +98,15 @@ public class Customer {
 	public void setEmailId(String emailId) {
 		this.emailId = emailId;
 	}
+	
+	public Long getKennitalaNumber() {
+		return kennitalaNumber;
+	}
+
+	public void setKennitalaNumber(Long kennitalaNumber) {
+		this.kennitalaNumber = kennitalaNumber;
+	}
+
 
 	public Set<Account> getAccounts() {
 		return accounts;
